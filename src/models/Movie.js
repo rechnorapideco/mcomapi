@@ -8,8 +8,7 @@ const movieSchema = new mongoose.Schema({
   screenshots: [{ type: String }],
   storyline: { type: String },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
+    type: String, // Now storing category name as string
     required: true,
   },
   uploadedBy: {
