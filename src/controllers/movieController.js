@@ -1,51 +1,41 @@
 import Movie from '../models/Movie.js';
 import Category from '../models/Category.js';
 
-
 export const uploadMovie = async (req, res) => {
-  try {
-    const {
-      name,
-      description,
-      imdbRating,
-      link,
-      screenshots,
-      storyline,
-      categoryName,
-      uploadedBy,
-      gmail,
-    } = req.body;
-
-    if (screenshots?.length > 10) {
-      return res.status(400).json({ error: 'Max 10 screenshots allowed' });
+    try {
+      const {
+        name,
+        description,
+        imdbRating,
+        link,
+        screenshots,
+        storyline,
+        categoryId,
+        uploadedBy,
+        gmail,
+      } = req.body;
+  
+      if (screenshots?.length > 10)
+        return res.status(400).json({ error: 'Max 10 screenshots allowed' });
+  
+      const movie = new Movie({
+        name,
+        description,
+        imdbRating,
+        link,
+        screenshots,
+        storyline,
+        category: categoryId,
+        uploadedBy,
+        gmail,
+      });
+  
+      await movie.save();
+      res.status(201).json(movie);
+    } catch (err) {
+      res.status(500).json({ error: 'Server error' });
     }
-
-    // Find the category by name
-    const category = await Category.findOne({ name: categoryName });
-    if (!category) {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    const movie = new Movie({
-      name,
-      description,
-      imdbRating,
-      link,
-      screenshots,
-      storyline,
-      category: category._id, // Use the found category's ID
-      uploadedBy,
-      gmail,
-    });
-
-    await movie.save();
-    res.status(201).json(movie);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
-};
-
+  };
   
 
 export const getAllMovies = async (req, res) => {
