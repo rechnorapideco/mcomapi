@@ -10,7 +10,7 @@ export const uploadMovie = async (req, res) => {
         link,
         screenshots,
         storyline,
-        categoryId,
+        categoryIds, // changed from categoryId to categoryIds (array)
         uploadedBy,
         gmail,
       } = req.body;
@@ -25,7 +25,7 @@ export const uploadMovie = async (req, res) => {
         link,
         screenshots,
         storyline,
-        category: categoryId,
+        categories: categoryIds, // changed from category to categories
         uploadedBy,
         gmail,
       });
@@ -40,7 +40,7 @@ export const uploadMovie = async (req, res) => {
 
 export const getAllMovies = async (req, res) => {
   try {
-    const movies = await Movie.find({}).populate('category', 'name');
+    const movies = await Movie.find({}).populate('categories', 'name');
     res.json(movies);
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
@@ -50,7 +50,7 @@ export const getAllMovies = async (req, res) => {
 export const getMovieByName = async (req, res) => {
   try {
     const { name } = req.params;
-    const movie = await Movie.findOne({ name }).populate('category', 'name');
+    const movie = await Movie.findOne({ name }).populate('categories', 'name');
     if (!movie) return res.status(404).json({ error: 'Movie not found' });
     res.json(movie);
   } catch (err) {
@@ -61,7 +61,7 @@ export const getMovieByName = async (req, res) => {
 export const getMoviesByCategory = async (req, res) => {
   try {
     const { categoryId } = req.params;
-    const movies = await Movie.find({ category: categoryId }).populate('category', 'name');
+    const movies = await Movie.find({ categories: categoryId }).populate('categories', 'name');
     res.json(movies);
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
