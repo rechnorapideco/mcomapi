@@ -7,11 +7,11 @@ const movieSchema = new mongoose.Schema({
   link: { type: String },
   screenshots: [{ type: String }],
   storyline: { type: String },
-  categories: [{
+  category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
     required: true,
-  }],
+  },
   uploadedBy: {
     type: String,
     required: true,
